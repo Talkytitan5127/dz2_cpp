@@ -21,25 +21,46 @@ struct data {
 struct buffer {
     unsigned char* buf;
     size_t size;
+};
+
+struct vector {
+    struct buffer** buf;
+    size_t size;
     size_t capacity;
 };
 
+// struct data's method
 struct data* init();
 
 void clear(struct data* container);
 
+
+// file's methods
 FILE* open_file(char* filepath);
 
+struct vector* read_data_from_file(FILE* file_handler);
+
+void close_file(FILE* file_handler);
+
+// string's methods
 struct buffer* read_byte_string(FILE* file_handler);
 
 void clear_string(struct buffer* string);
 
-void close_file(FILE* file_handler);
-
-struct data* count_difference_bytes(FILE* file_handler);
+int count_difference_bytes(const struct vector* data, int diff);
 
 struct data* process(char* filepath);
 
 void print_result(struct data* container);
+
+
+//vector's method
+struct vector* init_vector();
+
+int resize(struct vector* object);
+
+int push(struct vector* object, struct buffer* value);
+
+void delete_vector(struct vector* object);
 
 #endif //DZ2_STATIC_LIB_H
