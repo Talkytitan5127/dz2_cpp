@@ -31,6 +31,8 @@ enable_testing()
 add_subdirectory(dynamic_test)
 add_subdirectory(static_test)
 
+include_directories("${PROJECT_SOURCE_DIR}/include")
+
 #sources
 file(GLOB sources "${PROJECT_SOURCE_DIR}/src/*.c")
 

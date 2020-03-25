@@ -1,5 +1,6 @@
 set(CMAKE_C_STANDARD 11)
 
+include_directories("${PROJECT_SOURCE_DIR}/include")
 file(GLOB tests "${PROJECT_SOURCE_DIR}/dynamic_test/*.cpp")
 list(REMOVE_ITEM tests "${PROJECT_SOURCE_DIR}/dynamic_test/main.cpp")
 

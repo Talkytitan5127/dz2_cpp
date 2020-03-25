@@ -1,6 +1,4 @@
-#include <stdio.h>
-//#include "static_lib.h"
-#include "dynamic_lib.h"
+#include <interface.h>
 
 int main() {
 

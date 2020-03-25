@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 extern "C" {
-#include "dynamic_lib.h"
+#include <interface.h>
 }
 
 TEST(data_obj, init_ok) {

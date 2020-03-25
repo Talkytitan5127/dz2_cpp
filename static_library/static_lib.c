@@ -1,4 +1,4 @@
-#include "static_lib.h"
+#include "interface.h"
 
 //
 // Created by talkytitan on 23.03.2020.
