@@ -5,8 +5,6 @@ project(dz2)
 ### Test definitions ###
 ##
 
-add_compile_options("-Wall" "-Werror")
-
 configure_file(CMakeLists.txt.in
         googletest-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
@@ -16,6 +14,8 @@ execute_process(COMMAND ${CMAKE_COMMAND} --build .
 
 add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
         ${CMAKE_BINARY_DIR}/googletest-build)
+
+add_compile_options("-Wall" "-Werror" "-Wpedantic")
 
 #static library
 add_library(${PROJECT_NAME}_lib STATIC "static_library/static_lib.c")
