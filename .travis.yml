@@ -1,0 +1,32 @@
+language: c
+
+compiler:
+  - gcc
+
+addons:
+  apt:
+    packages:
+      - valgrind
+      - cppcheck
+      - make
+      - cmake
+      - lcov
+      - doxygen
+      - help2man
+
+script:
+  - export PROJECT_DIR=./
+  - cppcheck --error-exitcode=1 --enable=warning,performance,information,style static_library/*.c static_library/*.h
+  - cppcheck --error-exitcode=1 --enable=warning,performance,information,style dynamic_library/*.c dynamic_library/*.h
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build .
+  - export TEST_FILE=${PROJECT_DIR}/testfile.txt
+  - cd static_test
+  - valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./test_static
+  - lcov --directory . --capture --output-file coverage.info
+  - cd -
+  - cd dynamic_test
+  - valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./test_dynamic
+  - lcov --directory . --capture --output-file coverage.info
