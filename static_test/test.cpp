@@ -64,7 +64,7 @@ TEST(file, open_ok) {
 
 TEST(file, read_ok) {
     char* filepath = getenv("TEST_FILE");
-    ASSERT_TRUE(filepath != nullptr);
+    ASSERT_TRUE(filepath != NULL);
     unsigned char str1[] = "aaabbccc";
     struct buffer* string = init_string(str1);
 
@@ -79,7 +79,7 @@ TEST(file, read_ok) {
 
 TEST(file, process_ok) {
     char* filepath = getenv("TEST_FILE");
-    ASSERT_TRUE(filepath != nullptr);
+    ASSERT_TRUE(filepath != NULL);
 
     struct data* result = process(filepath);
     ASSERT_EQ(result->diff[0], 12);
