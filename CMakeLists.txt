@@ -5,7 +5,7 @@ project(dz2)
 ### Test definitions ###
 ##
 
-add_compile_options("-Wall" "-Werror" "-Wpedantic")
+add_compile_options("-Wall" "-Werror")
 
 configure_file(CMakeLists.txt.in
         googletest-download/CMakeLists.txt)
