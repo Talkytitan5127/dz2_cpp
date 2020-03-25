@@ -18,9 +18,6 @@ struct data* init() {
 }
 
 void clear(struct data* container) {
-    if (container->diff) {
-        free(container->diff);
-    }
     free(container);
 }
 
@@ -74,7 +71,7 @@ struct buffer* read_byte_string(FILE* file_handler) {
     for (int i = 0; i < count_bytes; i++) {
         tmp[i] = fgetc(file_handler);
     }
-    tmp[string->size] = '\0';
+    tmp[string->size - 1] = '\0';
     string->buf = tmp;
 
     if (c == '\n') {
@@ -83,7 +80,33 @@ struct buffer* read_byte_string(FILE* file_handler) {
     return string;
 }
 
+struct buffer* init_string(const unsigned char* value) {
+    int size;
+    for (size = 0; value[size] != '\0'; size++);
+
+    struct buffer* string = malloc(sizeof(struct buffer));
+    if (!string) {
+        return NULL;
+    }
+
+    if (!value) {
+        string->size = 0;
+        return string;
+    }
+
+    string->size = size + 1;
+    string->buf = (unsigned char*)malloc(string->size * sizeof(unsigned char));
+    for (int i = 0; i < size; i++) {
+        string->buf[i] = value[i];
+    }
+    string->buf[string->size - 1] = '\0';
+    return string;
+}
+
 void clear_string(struct buffer* string) {
+    if (!string) {
+        return;
+    }
     if (string->buf) {
         free(string->buf);
     }
@@ -92,6 +115,10 @@ void clear_string(struct buffer* string) {
 
 int count_difference_bytes(const struct vector* data, int diff) {
     int count = 0;
+    if (!data) {
+        return count;
+    }
+
     for (int word = 0; word < data->size; word++) {
         struct buffer* string = data->buf[word];
         for (int i = 0; i < string->size - 1; i++) {
@@ -129,20 +156,7 @@ struct data* process(char* filepath) {
     }
 
     for (int diff_ind = 0; diff_ind < DATA_SIZE; diff_ind++) {
-        int status = 0;
-        int* shared_count = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE,
-                MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-
-        *shared_count = 0;
-        if (!fork()) {
-            *shared_count = count_difference_bytes(&data_from_file[0], diff_ind);
-            exit(0);
-        } else {
-            wait(NULL);
-        }
-
-        container->diff[diff_ind] = *shared_count;
-
+        container->diff[diff_ind] = count_difference_bytes(&data_from_file[0], diff_ind);
     }
 
     delete_vector(data_from_file);
@@ -150,7 +164,7 @@ struct data* process(char* filepath) {
     return container;
 }
 
-void print_result(struct data* container) {
+void print_result(const struct data* container) {
     if (!container) {
         printf("Пустой контейнер\n");
         return;
@@ -199,6 +213,14 @@ int resize(struct vector* object) {
 }
 
 int push(struct vector* object, struct buffer* value) {
+    if (!object) {
+        return EXIT_FAILURE;
+    }
+
+    if (!value) {
+        return EXIT_SUCCESS;
+    }
+
     size_t new_size = object->size + 1;
     if (new_size >= object->capacity) {
         if (resize(object)) {
@@ -210,6 +232,10 @@ int push(struct vector* object, struct buffer* value) {
 }
 
 void delete_vector(struct vector* object) {
+    if (!object) {
+        return;
+    }
+
     for (int i = 0; i < object->size; i++) {
         if (object->buf[i]) {
             clear_string(object->buf[i]);

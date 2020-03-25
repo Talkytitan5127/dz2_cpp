@@ -8,9 +8,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/mman.h>
 
 #define EXIT_FAILURE 1
 #define EXIT_SUCCESS 0
@@ -48,13 +45,15 @@ void close_file(FILE* file_handler);
 // string's methods
 struct buffer* read_byte_string(FILE* file_handler);
 
+struct buffer* init_string(const unsigned char* value);
+
 void clear_string(struct buffer* string);
 
 int count_difference_bytes(const struct vector* data, int diff);
 
 struct data* process(char* filepath);
 
-void print_result(struct data* container);
+void print_result(const struct data* container);
 
 
 //vector's method
