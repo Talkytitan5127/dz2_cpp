@@ -34,8 +34,10 @@ struct vector* read_data_from_file(FILE* file_handler) {
     struct buffer* string;
 
     result = init_vector();
-    while(string = read_byte_string(file_handler), string) {
+    string = read_byte_string(file_handler);
+    while(string) {
         push(result, string);
+        string = read_byte_string(file_handler);
     }
 
     return result;
@@ -48,8 +50,10 @@ void close_file(FILE* file_handler) {
 struct buffer* read_byte_string(FILE* file_handler) {
     char c;
     int count_bytes = 0;
-    while (c = fgetc(file_handler), c != EOF && c != '\n') {
+    c = fgetc(file_handler);
+    while (c != EOF && c != '\n') {
         count_bytes++;
+        c = fgetc(file_handler);
     }
 
     if (!count_bytes) {
