@@ -16,12 +16,13 @@ addons:
 
 script:
   - export PROJECT_DIR=./
-  - cppcheck --error-exitcode=1 --enable=warning,performance,information,style static_library/*.c static_library/*.h
-  - cppcheck --error-exitcode=1 --enable=warning,performance,information,style dynamic_library/*.c dynamic_library/*.h
+  - cppcheck --error-exitcode=1 --enable=warning,performance,information,style static_library/*.c
+  - cppcheck --error-exitcode=1 --enable=warning,performance,information,style dynamic_library/*.c
+  - cppcheck --error-exitcode=1 --enable=warning,performance,information,style include/*.h
   - mkdir build
   - cd build
   - cmake ..
-  - cmake --build .
+  - make
   - export TEST_FILE=${PROJECT_DIR}/testfile.txt
   - cd static_test
   - valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./test_static

@@ -47,7 +47,7 @@ void close_file(FILE* file_handler) {
 }
 
 struct buffer* read_byte_string(FILE* file_handler) {
-    char c;
+    int c;
     int count_bytes = 0;
     c = fgetc(file_handler);
     while (c != EOF && c != '\n') {
@@ -78,7 +78,7 @@ struct buffer* read_byte_string(FILE* file_handler) {
     string->buf = tmp;
 
     if (c == '\n') {
-        c = fgetc(file_handler);
+        fgetc(file_handler);
     }
     return string;
 }
@@ -90,11 +90,6 @@ struct buffer* init_string(const unsigned char* value) {
     struct buffer* string = malloc(sizeof(struct buffer));
     if (!string) {
         return NULL;
-    }
-
-    if (!value) {
-        string->size = 0;
-        return string;
     }
 
     string->size = size + 1;
@@ -140,7 +135,6 @@ int count_difference_bytes(const struct vector* data, int diff) {
 struct data* process(char* filepath) {
     FILE* fh = open_file(filepath);
     if (!fh) {
-        close_file(fh);
         return NULL;
     }
 
